@@ -15,6 +15,7 @@ signal property_changed(property_name : StringName, value : Variant)
 
 @export var disable_not_found_properties : bool = false
 @export var reject_unlike_resources : bool = true
+@export var print_all_changes : bool = false
 
 func _ready():
 	if thing == null: 
@@ -27,6 +28,10 @@ func _ready():
 			_setup_property_source(property_source)
 		else:
 			print("Disable!")
+
+	ParasiteEventManager.subscribe("all/loaded_new_sequence", 
+		func(data): load_thing(data["sequence"])
+	)
 
 func load_thing(_thing : Variant):
 	self.thing = _thing
@@ -67,7 +72,8 @@ func _setup_property_source(property_source : PropertySource):
 			if thing.validate_property_value(property_name, new_value):
 				thing.set(property_name, new_value)
 				property_changed.emit(property_name, new_value)
-				#print("New value for %s: '%s'" % [property_name, new_value])
+				if print_all_changes: 
+					print("New value for %s: '%s'" % [property_name, new_value])
 	)
 
 func _get_thing_property_list() -> Array[StringName]:
