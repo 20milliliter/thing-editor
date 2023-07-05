@@ -1,6 +1,6 @@
 @icon("res://addons/thing-editor/ico.png")
 class_name ThingEditor
-extends Control 
+extends PanelContainer
 
 # Boilerplate manager to map UI Editable Fields to an Object's ("Thing's") properties.
 
