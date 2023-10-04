@@ -1,8 +1,7 @@
-@icon("res://addons/thing-editor/ico.png")
-class_name ThingEditor
-extends PanelContainer
-
-# Boilerplate manager to map UI Editable Fields to an Object's ("Thing's") properties.
+@icon("res://addons/thing-editor/ThingEditor.svg")
+class_name ThingEditor 
+extends Control
+## Boilerplate manager to map Editable Control Fields to an Object's ("Thing's") properties.
 
 signal property_changed(property_name : StringName, value : Variant)
 
@@ -28,10 +27,6 @@ func _ready():
 			_setup_property_source(property_source)
 		else:
 			print("Disable!")
-
-	ParasiteEventManager.subscribe("all/loaded_new_sequence", 
-		func(data): load_thing(data["sequence"])
-	)
 
 func load_thing(_thing : Variant):
 	self.thing = _thing
@@ -78,13 +73,10 @@ func _setup_property_source(property_source : PropertySource):
 
 func _get_thing_property_list() -> Array[StringName]:
 	var property_list = thing.get_property_list()
-	#print(property_list)
 	for item in property_list:
 		var item_name = item.get("name")
-		#print("%s : %s" % [item_name, len(item)])
 		if item.get("name").substr(len(item_name) - 3) == ".gd":
 			var start_idx = property_list.find(item) + 1
-			#print(start_idx)
 			var output : Array[StringName] = []
 			for idx in range(start_idx, len(property_list)):
 				output.append(property_list[idx].get("name"))
